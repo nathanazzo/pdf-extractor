@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import fitz  # PyMuPDF
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__)
+app = Flask(__name__)  # 👈 mettre ça en dehors de la fonction
 
 @app.route('/extract', methods=['POST'])
 def extract_text():
@@ -15,11 +15,8 @@ def extract_text():
     try:
         pdf_doc = fitz.open(stream=pdf_file.read(), filetype="pdf")
         full_text = ""
-
         for page in pdf_doc:
             full_text += page.get_text()
-
-        return jsonify({'text': full_text}), 200
-
+        return jsonify({'text': full_text})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
